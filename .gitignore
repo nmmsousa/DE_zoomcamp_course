@@ -1,0 +1,8 @@
+
+.DS_Store
+.terraform.lock.hcl
+.terraform/providers/registry.terraform.io/hashicorp/google/6.16.0/darwin_arm64/LICENSE.txt
+.terraform/providers/registry.terraform.io/hashicorp/google/6.16.0/darwin_arm64/terraform-provider-google_v6.16.0_x5
+cred/my-creds.json
+dataset/green_tripdata_2019-10.csv
+dataset/taxi_zone_lookup.csv

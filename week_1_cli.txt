@@ -1,0 +1,35 @@
+docker build -t my-python-image .
+docker run -it --name my-python-container my-python-image
+
+wget wget https://github.com/DataTalksClub/nyc-tlc-data/releases/download/green/green_tripdata_2019-10.csv.gz
+gunzip green_tripdata_2019-10.csv.gz 
+
+wget https://github.com/DataTalksClub/nyc-tlc-data/releases/download/misc/taxi_zone_lookup.csv
+
+docker compose up
+pgcli -h localhost -p 5432 -u root -d ny_taxi
+
+pip install sqlalchemy
+
+url="https://github.com/DataTalksClub/nyc-tlc-data/releases/download/green/green_tripdata_2019-10.csv.gz"
+
+python3 ingestion_data.py \
+    --user=root \
+    --password=root \
+    --host=localhost \
+    --port=5432 \
+    --db=ny_taxi \
+    --table_name=green_taxi_data \
+    --url=${url}
+
+
+url="https://github.com/DataTalksClub/nyc-tlc-data/releases/download/misc/taxi_zone_lookup.csv"
+
+python3 ingest_data.py \
+    --user=root \
+    --password=root \
+    --host=localhost \
+    --port=5432 \
+    --db=ny_taxi \
+    --table_name=lookup_zones \
+    --url=${url}
