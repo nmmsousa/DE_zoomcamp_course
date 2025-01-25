@@ -1,35 +1,44 @@
+#to run python:3.12.8 image#
 docker build -t my-python-image .
 docker run -it --name my-python-container my-python-image
 
-wget wget https://github.com/DataTalksClub/nyc-tlc-data/releases/download/green/green_tripdata_2019-10.csv.gz
-gunzip green_tripdata_2019-10.csv.gz 
-
-wget https://github.com/DataTalksClub/nyc-tlc-data/releases/download/misc/taxi_zone_lookup.csv
-
+#to run docker compose and interact with it#
 docker compose up
 pgcli -h localhost -p 5432 -u root -d ny_taxi
 
-pip install sqlalchemy
+
+#ingest data using docker#
+##The host should be the postgres host and not the localhost##
+###We also need to specify the same network as our postgres network###
+docker network ls
+to check the network of a specify container:
+docker inspect <container_name>
 
 url="https://github.com/DataTalksClub/nyc-tlc-data/releases/download/green/green_tripdata_2019-10.csv.gz"
 
-python3 ingestion_data.py \
+docker run -it --rm \
+--name data_ingest_container \
+--network green_taxi_default \
+taxi_ingest_data:v001 \
     --user=root \
     --password=root \
-    --host=localhost \
+    --host=postgres \
     --port=5432 \
     --db=ny_taxi \
-    --table_name=green_taxi_data \
+    --table_name=test \
     --url=${url}
 
 
 url="https://github.com/DataTalksClub/nyc-tlc-data/releases/download/misc/taxi_zone_lookup.csv"
 
-python3 ingest_data.py \
+docker run -it --rm \
+--name data_ingest_container \
+--network green_taxi_default \
+taxi_ingest_data:v001 \
     --user=root \
     --password=root \
-    --host=localhost \
+    --host=postgres \
     --port=5432 \
     --db=ny_taxi \
-    --table_name=lookup_zones \
+    --table_name=test \
     --url=${url}
