@@ -18,9 +18,9 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
     environment:
-      POSTGRES_DB: kestra
-      POSTGRES_USER: kestra
-      POSTGRES_PASSWORD: k3str4
+      POSTGRES_DB: ${POSTGRES_KESTRA_DB}
+      POSTGRES_USER: ${POSTGRES_KESTRA_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_KESTRA_PASSWORD}
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
       interval: 30s
@@ -42,16 +42,16 @@ services:
       KESTRA_CONFIGURATION: |
         datasources:
           postgres:
-            url: jdbc:postgresql://postgres-kestra:5432/kestra
+            url: jdbc:postgresql://postgres-kestra:5432/${POSTGRES_KESTRA_DB}
             driverClassName: org.postgresql.Driver
-            username: kestra
-            password: k3str4
+            username: ${POSTGRES_KESTRA_USER}
+            password: ${POSTGRES_KESTRA_PASSWORD}
         kestra:
           server:
             basicAuth:
               enabled: false
-              username: "admin@kestra.io"
-              password: kestra
+              username: ${PGADMIN_EMAIL}
+              password: ${PGADMIN_PASSWORD}
           repository:
             type: postgres
           storage:
@@ -71,14 +71,14 @@ services:
       postgres-kestra:
         condition: service_healthy
 
-  # PostgreSQL taxi_database
+  # PostgreSQL Taxi Database
   postgres-db:
     image: postgres
     container_name: postgres-db
     environment:
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=admin
-      - POSTGRES_DB=postgres_db
+      - POSTGRES_USER=${POSTGRES_DB_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_DB_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB_NAME}
     volumes:
       - "vol-postgres:/var/lib/postgresql/data"
     ports:
@@ -90,8 +90,8 @@ services:
     image: dpage/pgadmin4
     container_name: pgadmin
     environment:
-      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
-      - PGADMIN_DEFAULT_PASSWORD=root
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD}
     volumes:
       - "vol-pgadmin:/var/lib/pgadmin"
     ports:
