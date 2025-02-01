@@ -10,12 +10,12 @@ variable "project" {
 
 variable "region" {
   description = "my region"
-  default     = "europe-southwest1-a"
+  default     = "europe-west2"
 }
 
-variable "my_first_bucket" {
-  description = "my first bucket"
-  default     = "red-night-446017-r7"
+variable "datalake" {
+  description = "datalake for csv files"
+  default     = "data_lake_csv"
 }
 
 variable "location" {
@@ -25,5 +25,5 @@ variable "location" {
 
 variable "dataset_name" {
   description = "dataset name"
-  default     = "exmaple_dataset"
+  default     = "zoomcamp"
 }

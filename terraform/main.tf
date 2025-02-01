@@ -4,8 +4,8 @@ provider "google" {
   region      = var.region
 }
 
-resource "google_storage_bucket" "my_first_bucket" {
-  name          = var.my_first_bucket
+resource "google_storage_bucket" "data_lake_csv" {
+  name          = var.datalake
   location      = var.location
   force_destroy = true
 
@@ -21,4 +21,5 @@ resource "google_storage_bucket" "my_first_bucket" {
 
 resource "google_bigquery_dataset" "dataset" {
   dataset_id = var.dataset_name
+  location = var.region
 }
